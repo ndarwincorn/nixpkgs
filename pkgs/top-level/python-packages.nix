@@ -248,6 +248,8 @@ in {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auth0-python = callPackage ../development/python-modules/auth0-python { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autologging = callPackage ../development/python-modules/autologging { };
@@ -517,6 +519,8 @@ in {
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
 
   blivet = callPackage ../development/python-modules/blivet { };
+
+  bluepy = callPackage ../development/python-modules/bluepy { };
 
   boltons = callPackage ../development/python-modules/boltons { };
 
@@ -1217,6 +1221,10 @@ in {
   pykeepass = callPackage ../development/python-modules/pykeepass { };
 
   pylev = callPackage ../development/python-modules/pylev { };
+
+  pylibftdi = callPackage ../development/python-modules/pylibftdi {
+    inherit (pkgs) libusb1;
+  };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
@@ -2215,6 +2223,8 @@ in {
   cligj = callPackage ../development/python-modules/cligj { };
 
   closure-linter = callPackage ../development/python-modules/closure-linter { };
+
+  cloudflare = callPackage ../development/python-modules/cloudflare { };
 
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 

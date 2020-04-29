@@ -292,11 +292,7 @@ in
 
   packer = callPackage ../development/tools/packer { };
 
-  packr = callPackage ../development/libraries/packr {
-    # Version 2.6.0 fails to build with go 1.13 due to nested modules:
-    #   go: directory v2/packr2 is outside main module
-    buildGoModule = buildGo112Module;
-  };
+  packr = callPackage ../development/libraries/packr { };
 
   pet = callPackage ../development/tools/pet { };
 
@@ -450,7 +446,7 @@ in
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
-  srcOnly = args: callPackage ../build-support/src-only args;
+  srcOnly = callPackage ../build-support/src-only { };
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
@@ -1240,14 +1236,9 @@ in
     charles4
   ;
 
-  inherit (libsForQt5.callPackage ../development/libraries/libqmatrixclient { })
-    libqmatrixclient_0_4
-    libqmatrixclient_0_5
-    libqmatrixclient;
+  libquotient = libsForQt5.callPackage ../development/libraries/libquotient {};
 
-  inherit (libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { })
-    quaternion
-    quaternion-git;
+  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
@@ -1502,11 +1493,7 @@ in
 
   compactor = callPackage ../applications/networking/compactor { };
 
-  consul = callPackage ../servers/consul {
-    # Version 1.6.0 fails to build with go 1.13 due to broken dependency:
-    #   go/src/github.com/hashicorp/consul/vendor/github.com/envoyproxy/go-control-plane/envoy/type/http_status.pb.go:11:2: code in directory /build/go/src/github.com/hashicorp/consul/vendor/github.com/envoyproxy/protoc-gen-validate/validate expects import "github.com/lyft/protoc-gen-validate/validate"
-    buildGoPackage = buildGo112Package;
-  };
+  consul = callPackage ../servers/consul { };
 
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
@@ -2088,6 +2075,8 @@ in
   onnxruntime = callPackage ../development/libraries/onnxruntime { };
 
   xkbd = callPackage ../applications/misc/xkbd { };
+
+  libpsm2 = callPackage ../os-specific/linux/libpsm2 { };
 
   optar = callPackage ../tools/graphics/optar {};
 
@@ -2775,11 +2764,7 @@ in
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
 
-  curlie = callPackage ../tools/networking/curlie {
-    # Version 1.2.0 fails to build with go 1.13 due to:
-    #    verifying golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: Get https://sum.golang.org/lookup/golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:49088->[::1]:53: read: connection refused
-    buildGoModule = buildGo112Module;
-  };
+  curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
@@ -3903,9 +3888,7 @@ in
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
-  grpcui = callPackage ../tools/networking/grpcui {
-    buildGoModule = buildGo112Module;
-  };
+  grpcui = callPackage ../tools/networking/grpcui { };
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
@@ -4328,12 +4311,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    # Version 0.4.22 fails to build with go 1.13 due to version validation:
-    #    go: github.com/go-critic/go-critic@v0.0.0-20181204210945-ee9bf5809ead: invalid pseudo-version: does not match version-control timestamp (2019-02-10T22:04:43Z)
-    # This is fixed in master, but release containing the fix does not exist yet.
-    buildGoModule = buildGo112Module;
-  };
+  ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
@@ -5434,7 +5412,7 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
- nomad = callPackage ../applications/networking/cluster/nomad { };
+  nomad = callPackage ../applications/networking/cluster/nomad { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -5541,6 +5519,8 @@ in
   nyancat = callPackage ../tools/misc/nyancat { };
 
   nylon = callPackage ../tools/networking/nylon { };
+
+  nym = callPackage ../applications/networking/nym { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -5874,9 +5854,7 @@ in
 
   briss = callPackage ../tools/graphics/briss { };
 
-  brickd = callPackage ../servers/brickd {
-    libusb = libusb1;
-  };
+  brickd = callPackage ../servers/brickd { };
 
   bully = callPackage ../tools/networking/bully {
     openssl = openssl_1_0_2;
@@ -5990,7 +5968,8 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
-  podman = callPackage ../applications/virtualization/podman { };
+  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -6031,8 +6010,6 @@ in
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
-
-  prey-bash-client = callPackage ../tools/security/prey { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
 
@@ -8578,13 +8555,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_12 = callPackage ../development/compilers/go/1.12.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
-  });
-
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
@@ -8988,6 +8958,8 @@ in
   opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
+
+  open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
 
   pforth = callPackage ../development/compilers/pforth {};
 
@@ -9487,9 +9459,9 @@ in
   php73Extensions = recurseIntoAttrs php73.extensions;
   php74Extensions = recurseIntoAttrs php74.extensions;
 
-  inherit (callPackages ../development/interpreters/php {
+  inherit (callPackage ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72 php74base php73base php72base;
+  }) php74 php73 php72;
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -9701,26 +9673,6 @@ in
 
 
   ### DEVELOPMENT / MISC
-
-  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
-
-  amdappsdk26 = amdappsdk.override {
-    version = "2.6";
-  };
-
-  amdappsdk27 = amdappsdk.override {
-    version = "2.7";
-  };
-
-  amdappsdk28 = amdappsdk.override {
-    version = "2.8";
-  };
-
-  amdappsdk = callPackage ../development/misc/amdapp-sdk { };
-
-  amdappsdkFull = amdappsdk.override {
-    samples = true;
-  };
 
   h3 = callPackage ../development/misc/h3 { };
 
@@ -9956,9 +9908,7 @@ in
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher {
-    go = go_1_12;
-  };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
   bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
 
@@ -12141,9 +12091,7 @@ in
 
   heyefi = haskellPackages.heyefi;
 
-  hidapi = callPackage ../development/libraries/hidapi {
-    libusb = libusb1;
-  };
+  hidapi = callPackage ../development/libraries/hidapi { };
 
   highfive = callPackage ../development/libraries/highfive { };
 
@@ -12368,10 +12316,6 @@ in
   };
 
   kf5gpgmepp = libsForQt5.callPackage ../development/libraries/kf5gpgmepp { };
-
-  kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client {
-    openssl = openssl_1_0_2;
-  };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
@@ -12810,6 +12754,8 @@ in
   libexttextcat = callPackage ../development/libraries/libexttextcat {};
 
   libf2c = callPackage ../development/libraries/libf2c {};
+
+  libfabric = callPackage ../os-specific/linux/libfabric {};
 
   libfive = callPackage ../development/libraries/libfive { };
 
@@ -13365,7 +13311,7 @@ in
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
-  libusb = callPackage ../development/libraries/libusb {};
+  libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
     inherit (darwin) libobjc;
@@ -14618,10 +14564,7 @@ in
 
   stfl = callPackage ../development/libraries/stfl { };
 
-  stlink = callPackage ../development/tools/misc/stlink {
-    # The Darwin build of stlink explicitly refers to static libusb.
-    libusb1 = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
-  };
+  stlink = callPackage ../development/tools/misc/stlink { };
 
   steghide = callPackage ../tools/security/steghide {};
 
@@ -14795,9 +14738,7 @@ in
 
   ustr = callPackage ../development/libraries/ustr { };
 
-  usbredir = callPackage ../development/libraries/usbredir {
-    libusb = libusb1;
-  };
+  usbredir = callPackage ../development/libraries/usbredir { };
 
   uthash = callPackage ../development/libraries/uthash { };
 
@@ -15068,9 +15009,7 @@ in
 
   yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
-  yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
-    libusb = libusb1;
-  };
+  yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
@@ -15220,18 +15159,12 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo112Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_12;
-  };
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
 
   buildGoPackage = buildGo114Package;
 
-  buildGo112Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_12;
-  };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
   };
@@ -15550,9 +15483,7 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gobetween = callPackage ../servers/gobetween {
-    buildGoModule = buildGo112Module;
-  };
+  gobetween = callPackage ../servers/gobetween { };
 
   h2o = callPackage ../servers/http/h2o { };
 
@@ -16010,11 +15941,7 @@ in
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
-  prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix {
-    # Version 1.5.1 fails to build with go 1.13 due to test failure
-    #  FAIL       github.com/jonnenauha/prometheus_varnish_exporter       0.041s
-    buildGoModule = buildGo112Module;
-  };
+  prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -16410,9 +16337,7 @@ in
 
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    buildGoPackage = buildGo112Package;
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
@@ -17266,11 +17191,7 @@ in
 
   gotests = callPackage ../development/tools/gotests { };
 
-  gotestsum = callPackage ../development/tools/gotestsum {
-    # Version 0.3.5 fails to build with go 1.13:
-    #    build ./testjson/internal/badmain: cannot find module for path ./testjson/internal/badmain
-    buildGoModule = buildGo112Module;
-  };
+  gotestsum = callPackage ../development/tools/gotestsum { };
 
   impl = callPackage ../development/tools/impl { };
 
@@ -18755,11 +18676,7 @@ in
     poppler = poppler_0_61;
   };
 
-  perkeep = callPackage ../applications/misc/perkeep {
-    # Revision c9f78d02adf9740f3b8d403a1418554293cc9f41 fails to build with go 1.13 due to a dependency:
-    #   go: bazil.org/fuse@v0.0.0-20160811212531-371fbbdaa898: Get https://proxy.golang.org/bazil.org/fuse/@v/v0.0.0-20160811212531-371fbbdaa898.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:36526->[::1]:53: read: connection refused
-    buildGoPackage = buildGo112Package;
-  };
+  perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
@@ -19428,8 +19345,6 @@ in
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
-  gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
-
   goxel = callPackage ../applications/graphics/goxel { };
 
   gpa = callPackage ../applications/misc/gpa { };
@@ -19839,7 +19754,7 @@ in
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
 
-  guvcview = callPackage ../os-specific/linux/guvcview { };
+  guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
@@ -20576,10 +20491,7 @@ in
 
   marp = callPackage ../applications/office/marp { };
 
-  magnetico = callPackage ../applications/networking/p2p/magnetico {
-    # Version 2019-08-14 fails to build with go 1.13 due to missing go.sum
-    buildGoModule = buildGo112Module;
-  };
+  magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
@@ -20702,6 +20614,7 @@ in
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+    botan = botan.override (x: { openssl = null; });
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
@@ -20867,9 +20780,7 @@ in
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
-  openshift = callPackage ../applications/networking/cluster/openshift {
-    buildGoPackage = buildGo112Package;
-  };
+  openshift = callPackage ../applications/networking/cluster/openshift { };
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
@@ -21493,7 +21404,12 @@ in
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
-  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion { };
+  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion {
+    guvcview = guvcview.override {
+      useQt = true;
+      useGtk = false;
+    };
+  };
 
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
@@ -22099,9 +22015,7 @@ in
 
   teleprompter = callPackage ../applications/misc/teleprompter {};
 
-  tendermint = callPackage ../tools/networking/tendermint {
-    buildGoModule = buildGo112Module;
-  };
+  tendermint = callPackage ../tools/networking/tendermint { };
 
   termdown = (newScope pythonPackages) ../applications/misc/termdown { };
 
@@ -23145,9 +23059,7 @@ in
   };
   litecoind = litecoin.override { withGui = false; };
 
-  lnd = callPackage ../applications/blockchains/lnd.nix {
-    buildGoModule = buildGo112Module;
-  };
+  lnd = callPackage ../applications/blockchains/lnd.nix { };
 
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
@@ -23315,9 +23227,7 @@ in
 
   crispyDoom = callPackage ../games/crispy-doom { };
 
-  cri-o = callPackage ../applications/virtualization/cri-o {
-    buildGoPackage = buildGo112Package;
-  };
+  cri-o = callPackage ../applications/virtualization/cri-o { };
 
   ckan = callPackage ../games/ckan { };
 
@@ -23814,9 +23724,7 @@ in
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli {
-    buildGoPackage = buildGo112Package;
-  };
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
   scid = callPackage ../games/scid {
     tcl = tcl-8_5;
@@ -25203,9 +25111,7 @@ in
 
   clinfo = callPackage ../tools/system/clinfo { };
 
-  cups = callPackage ../misc/cups {
-    libusb = libusb1;
-  };
+  cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
 
@@ -25253,13 +25159,9 @@ in
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
-  cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 {
-    libusb = libusb1;
-  };
+  cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 { };
 
-  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
-    libusb = libusb1;
-  };
+  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
 
   darcnes = callPackage ../misc/emulators/darcnes { };
 
@@ -25438,11 +25340,12 @@ in
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
+  # In general we only want keep the last three minor versions around that
+  # correspond to the last three supported kubernetes versions:
+  # https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
+  # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_12
-    kops_1_13
-    kops_1_14
     kops_1_15
     kops_1_16
     ;
@@ -26265,8 +26168,8 @@ in
 
   dart = callPackage ../development/interpreters/dart { };
   dart_old = dart.override    { version = "1.24.3"; };
-  dart_stable = dart.override { version = "2.7.1"; };
-  dart_dev = dart.override    { version = "2.8.0-dev.10.0"; };
+  dart_stable = dart.override { version = "2.7.2"; };
+  dart_dev = dart.override    { version = "2.9.0-4.0.dev"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 
