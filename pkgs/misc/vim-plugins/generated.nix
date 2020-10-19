@@ -2590,6 +2590,18 @@ let
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
 
+  nvim-typescript = buildVimPluginFrom2Nix {
+    pname = "nvim-typescript";
+    version = "2020-10-13";
+    src = fetchFromGitHub {
+      owner = "mhartington";
+      repo = "nvim-typescript";
+      rev = "f57f6c03adbeabbc5a712e93fe12902d76f80375";
+      sha256 = "1xi6bylirn6k0rwnj3x63imqwnw5vqm2qblwyj3b0sibdisv2571";
+    };
+    meta.homepage = "https://github.com/mhartington/nvim-typescript/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2020-04-08";
